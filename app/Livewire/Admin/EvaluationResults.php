@@ -122,8 +122,8 @@ class EvaluationResults extends Component
                     ->where('faculty_id', $faculty)->get();
 
                 $sorted_responses = [];
-
                 $comments = [];
+                $vader_scores = ['pos'=>[],'neg'=>[],'neu'=>[],'compound'=>[],'sentiment'=>''];
 
                 // sorted responses
                 foreach ($responses as $response) {
@@ -239,7 +239,6 @@ class EvaluationResults extends Component
                             $evaluation_result['stats'][$key]['items'][$response['questionnaire_id']]['tally'][$response['response_rating']]++;
                         }
                     }
-
                 }
 
                 // reset indexed values
@@ -562,8 +561,6 @@ class EvaluationResults extends Component
                     }
                 }
 
-
-
                 // Compute weighted mean, mean squared, standard deviation, and interpretation
                 foreach ($evaluation_result['stats'] as $criteria_id => &$criteria) {
                     foreach ($criteria['items'] as $questionnaire_id => &$item) {
@@ -619,8 +616,7 @@ class EvaluationResults extends Component
                     ];
                 }
 
-
-
+                //andrei
                 $evaluation_result['template'] = $template->toArray();
                 $evaluation_result['respondents'] = $this->respondents(1, array_values($evaluation_result));
                 $evaluation_results[] = $evaluation_result;
@@ -645,7 +641,7 @@ class EvaluationResults extends Component
                         });
                 })
                 ->get()[0],
-                'evaluation_results' => $evaluation_results
+                'evaluation_results' => $evaluation_results,
             ];
 
             return $view;

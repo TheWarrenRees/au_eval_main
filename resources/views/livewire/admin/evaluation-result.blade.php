@@ -251,8 +251,9 @@
                     <div class="p-4 mt-5 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
                         <div class="uppercase font-bold">All Comments</div>
                     </div>
-                    <div class="relative overflow-hidden shadow rounded-lg mt-2 max-h-56">
-                        <table class="w-full text-sm text-left">
+                    {{-- andrei --}}
+                    <div class="relative overflow-hidden shadow rounded-lg mt-2 max-h-56 overflow-y-auto" > 
+                        <table class="w-full text-sm text-left" >
                             <tbody>
                                 @forelse ($view['evaluation_result']['comments'] as $key => $comments)
                                     <tr class="bg-white border-b">

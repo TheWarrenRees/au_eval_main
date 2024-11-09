@@ -64,6 +64,10 @@ class DatabaseSeeder extends Seeder
             QuestionnaireItemSeeder::class,
             ResponseSeeder::class,
             ResponseItemSeeder::class,
+            PeerQuestionnaireSeeder::class,
+            PeerQuestionnaireItemSeeder::class,
+            PeerResponseSeeder::class,
+            PeerResponseItemSeeder::class,
             CurriculumTemplateSeeder::class,
             FacultyTemplateSeeder::class,
         ]);

@@ -13,17 +13,12 @@ class PeerQuestionnaireSeeder extends Seeder
      */
     public function run(): void
     {
-        $samplequestionnaire = [
-            [
-                'id' => '1',
-                'school_year_id' => '601',
-                'name' => 'Peer Eval',
-                'slug' => 'PE 2024',
-            ],
-
+        $samplepeerquestionnaire = [
+            ['school_year_id' => '1', 'name' => '1st Sem End Peer Evaluation 2024'],
         ];
-        foreach ($samplequestionnaire as $questionnaire){
-            PeerQuestionnaireModel::updateOrCreate(['id' => $questionnaire['id']], $questionnaire);
-        }        
+
+        foreach ($samplepeerquestionnaire as $peerquestionnaire){
+            PeerQuestionnaireModel::updateOrCreate(['school_year_id' => $peerquestionnaire['school_year_id']], $peerquestionnaire);
+        }      
     }
 }

@@ -14,49 +14,12 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
         $sampledepartment = [
-            [
-                'id' => '301',
-                'branch_id' => '202',
-                'name' => 'School of Information Technology',
-            ],
-            [
-                'id' => '302',
-                'branch_id' => '202',
-                'name' => 'School of Business and Administration',
-            ],
-            [
-                'id' => '303',
-                'branch_id' => '202',
-                'name' => 'College of Nursing',
-            ],
-            [
-                'id' => '304',
-                'branch_id' => '202',
-                'name' => 'School of Hospitality and Tourism Management',
-            ],
-            [
-                'id' => '305',
-                'branch_id' => '202',
-                'name' => 'College of Arts and Sciences',
-            ],
-            [
-                'id' => '306',
-                'branch_id' => '202',
-                'name' => 'College of Criminal Justice',
-            ],
-            [
-                'id' => '307',
-                'branch_id' => '202',
-                'name' => 'School of Education',
-            ],
-            [
-                'id' => '308',
-                'branch_id' => '202',
-                'name' => 'School of Midwifery',
-            ],
+            ['branch_id' => 1, 'name' => 'School of Information Technology'],
+            ['branch_id' => 1, 'name' => 'School of Business and Administration'],
         ];
+
         foreach ($sampledepartment as $department){
-            DepartmentModel::updateOrCreate(['id' => $department['id']], $department);
+            DepartmentModel::updateOrCreate(['branch_id' => $department['branch_id'], 'name' => $department['name']], $department);
         }
     }
 }

@@ -88,13 +88,13 @@
                                 <li class="my-2">
                                     <a href="javascript:void(0" wire:click='save_excel'>Save as EXCEL (.xlsx)</a>
                                 </li>
-                                <hr class="my-3">
+                                {{-- <hr class="my-3">
                                 <li class="my-2">
                                     <a href="javascript:void(0)" wire:click='save_all_pdf' download>Save all as PDF (.pdf)</a>
                                 </li>
                                 <li class="my-2">
                                     <a href="javascript:void(0" wire:click='save_all_excel'>Save all as EXCEL (.xlsx)</a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                     </div>
@@ -261,7 +261,7 @@
                     <div class="p-4 mt-5 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
                         <div class="uppercase font-bold">All Comments</div>
                     </div>
-                    <div class="relative overflow-hidden shadow rounded-lg mt-2 max-h-56">
+                    <div class="relative overflow-hidden shadow rounded-lg mt-2 max-h-56 overflow-y-auto">
                         <table class="w-full text-sm text-left">
                             <tbody>
                                 @forelse ($view['evaluation_result']['comments'] as $key => $comments)
