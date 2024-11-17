@@ -253,32 +253,33 @@ class EvaluationResults extends Component
                         $tally = [];
                         foreach ($item['tally'] as $key => $value) {
                             $tally[$key] = $key * $value;
-                        }
+                        }                  
                         $total = array_sum($tally) / (int) $evaluation_result['total_responses'];
                         $item['weighted_mean'] = $total;
+                        // dd($total);  
                     }
                 }
 
-                // compute mean squared
-                foreach ($evaluation_result['stats'] as &$criteria) {
-                    foreach ($criteria['items'] as &$item) {
-                        $tally = [];
-                        foreach ($item['tally'] as $key => &$value) {
-                            $squared = ($key * $key);
-                            $tally[$key] = $squared * $value;
-                        }
-                        $total = array_sum($tally) / (int) $evaluation_result['total_responses'];
-                        $item['mean_squared'] = $total;
-                    }
-                }
+                // compute mean squared, wala muna sabi ni dean
+                // foreach ($evaluation_result['stats'] as &$criteria) {
+                //     foreach ($criteria['items'] as &$item) {
+                //         $tally = [];
+                //         foreach ($item['tally'] as $key => &$value) {
+                //             $squared = ($key * $key);
+                //             $tally[$key] = $squared * $value;
+                //         }
+                //         $total = array_sum($tally) / (int) $evaluation_result['total_responses'];
+                //         $item['mean_squared'] = $total;
+                //     }
+                // }
 
-                // compute standard deviation
-                foreach ($evaluation_result['stats'] as &$criteria) {
-                    foreach ($criteria['items'] as &$item) {
-                        $sd = sqrt((int)$item['mean_squared'] - (int) $item['weighted_mean']);
-                        $item['standard_deviation'] = $sd;
-                    }
-                }
+                // compute standard deviation, wala muna sabi ni dean
+                // foreach ($evaluation_result['stats'] as &$criteria) {
+                //     foreach ($criteria['items'] as &$item) {
+                //         $sd = sqrt((int)$item['mean_squared'] - (int) $item['weighted_mean']);
+                //         $item['standard_deviation'] = $sd;
+                //     }
+                // }
 
                 // put the interpretation
                 foreach ($evaluation_result['stats'] as &$criteria) {
@@ -299,8 +300,8 @@ class EvaluationResults extends Component
 
                     foreach($results['items'] as $items) {
                         $mean += $items['weighted_mean'];
-                        $squared += $items['mean_squared'];
-                        $std += $items['standard_deviation'];
+                        // $squared += $items['mean_squared'];
+                        // $std += $items['standard_deviation'];
                     }
 
                     if($evaluation_result['total_responses'] > 0) {
@@ -353,6 +354,7 @@ class EvaluationResults extends Component
                 ];
 
                 $this->view = $view;
+                // dd($view);
 
             } else {
 
@@ -643,8 +645,8 @@ class EvaluationResults extends Component
                 ->get()[0],
                 'evaluation_results' => $evaluation_results,
             ];
-
             return $view;
+            
         }
     }
 
@@ -730,19 +732,23 @@ class EvaluationResults extends Component
 
     public function save_pdf() {
 
+        $vader_scores = $this->view['vader_scores']['compound'];
+
         $data = [
             'view' => $this->view,
+            'vader' => $this->vader_interpretation($vader_scores),
+            'tab' => $this->form['tab']
         ];
 
+        // dd($data['vader']);
         $pdf = PDF::loadView('printable.result-view', $data);
 
         $faculty = $this->view['faculty'];
         $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '_' .time().'.pdf');
-
+        // @dd($tab);
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
         }, $filename);
-
     }
 
     public function save_excel() {
@@ -787,6 +793,40 @@ class EvaluationResults extends Component
         return Response::download($tempFilePath, $filename)->deleteFileAfterSend(true);
 
     }
+
+    //--------------------interpret vader-----------------------
+        public function vader_interpretation($vader_scores) {
+            
+            $compound = $this->calculateAverage($vader_scores);
+            if ($compound >= 0.50) {
+                $vinterpret = 'strongly positive';
+            } else if ($compound > 0.25 && $compound < 0.50) {
+                $vinterpret = 'positive';
+            } else if ($compound > 0 && $compound < 0.25) {
+                $vinterpret = 'moderate positive';
+            } else if ($compound == 0) {
+                $vinterpret = 'neutral'; 
+            } else if ($compound > -0.25 && $compound < 0) {
+                $vinterpret = 'moderate negative';
+            } else if ($compound > -0.50 && $compound < -0.25) {
+                $vinterpret = 'negative';
+            } else {
+                $vinterpret = 'strongly negative'; 
+            };
+
+            $formatted_compound = number_format($compound, 2);
+
+            $sentiment = [
+                'score'=>$formatted_compound , 'interpretation'=>$vinterpret
+            ];
+            return $sentiment;               
+        }
+
+        public function calculateAverage($array) {
+            $sum = array_sum($array);
+            $average = $sum / count($array);
+            return round($average, 2);            
+        }
 
     public function save_all_excel() {
 

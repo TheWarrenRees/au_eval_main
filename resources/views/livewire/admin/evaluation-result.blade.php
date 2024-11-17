@@ -39,6 +39,7 @@
                 </ul>
             </div>
             <div class="relative my-8 w-100 sm:flex gap-3">
+                {{-- @dd($view['all_templates']) --}}
                 @foreach ($view['all_templates']->templates as $key => $template)
                     @if($form['tab'] == $key+1)
                         <a wire:navigate href="{{ route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $template->faculty_id, 'template' => $template->template_id, 'subject' => $template->curriculum_template[0]->subject_id, 'tab' => $key + 1])}}" class="px-3 border bg-sky-600 border-sky-600 py-3 text-white font-bold">
@@ -65,6 +66,17 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                             </svg>
                         </button>
+                        @if($view['evaluation_result']['stats'][0]['items']==null)
+                        <div id="dropdown" class="w-100 dropdown z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-100 dark:bg-gray-700">
+                            <ul class="py-2 px-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap" aria-labelledby="dropdownDefaultButton">
+                                <li class="mt-2">
+                                    <div class="text-xs uppercase font-bold whitespace-nowrap">
+                                        No responses yet
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        @else
                         <div wire:ignore.self id="dropdown" class="w-100 dropdown z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-100 dark:bg-gray-700">
                             <ul class="py-2 px-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap" aria-labelledby="dropdownDefaultButton">
                                 <li class="mt-2">
@@ -76,18 +88,19 @@
                                 <li class="my-2">
                                     <a href="javascript:void(0)" wire:click='save_pdf' download>Save as PDF (.pdf)</a>
                                 </li>
-                                <li class="my-2">
+                                {{-- <li class="my-2">
                                     <a href="javascript:void(0" wire:click='save_excel'>Save as EXCEL (.xlsx)</a>
-                                </li>
+                                </li> --}}
                                 <hr class="my-3">
                                 <li class="my-2">
                                     <a href="javascript:void(0)" wire:click='save_all_pdf' download>Save all as PDF (.pdf)</a>
                                 </li>
-                                <li class="my-2">
+                                {{-- <li class="my-2">
                                     <a href="javascript:void(0" wire:click='save_all_excel'>Save all as EXCEL (.xlsx)</a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -102,14 +115,14 @@
                                 </span>
                             </th>
                             <th class="px-6 py-5 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
-                                Weighted Mean
+                                Average Rating
                             </th>
-                            <th class="px-6 py-5 text-center whitespace-nowrap bg-violet-400 text-violet-800 border-b border-l border-r border-slate-500">
+                            {{-- <th class="px-6 py-5 text-center whitespace-nowrap bg-violet-400 text-violet-800 border-b border-l border-r border-slate-500">
                                 Mean²
                             </th>
                             <th class="px-6 py-5 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
                                 𝜎 (Standard Deviation)
-                            </th>
+                            </th> --}}
                             <th class="px-6 py-5 text-center whitespace-nowrap border-b border-slate-500">
                                 Interpretation
                             </th>
@@ -123,12 +136,12 @@
                                         {{ucwords($questionnaire['criteria_name'])}}
                                     </div>
                                 </th>
-                                <th class="px-6 py-3 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
+                                {{-- <th class="px-6 py-3 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
 
                                 </th>
                                 <th class="px-6 py-3 text-center whitespace-nowrap bg-violet-400 text-violet-800 border-b border-l border-r border-slate-500">
 
-                                </th>
+                                </th> --}}
                                 <th class="px-6 py-3 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
 
                                 </th>
@@ -148,12 +161,12 @@
                                     <td class="px-14 py-4 text-center font-bold border border-slate-500">
                                         {{number_format($items['weighted_mean'], 2)}}
                                     </td>
-                                    <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
+                                    {{-- <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
                                         {{number_format($items['mean_squared'], 2)}}
                                     </td>
                                     <td class="px-6 py-4 text-center font-bold border border-slate-500">
                                         {{number_format($items['standard_deviation'], 2)}}
-                                    </td>
+                                    </td> --}}
                                     <td class="px-6 py-4 text-center font-bold border-b border-slate-500 whitespace-nowrap">
                                         {!!to_interpret($items['interpretation'])!!}
                                     </td>
@@ -168,12 +181,12 @@
                                 <td class="px-14 py-4 text-center font-bold border border-slate-500">
                                     {{number_format(0, 2)}}
                                 </td>
-                                <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
+                                {{-- <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
                                     {{number_format(0, 2)}}
                                 </td>
                                 <td class="px-6 py-4 text-center font-bold border border-slate-500">
                                     {{number_format(0, 2)}}
-                                </td>
+                                </td> --}}
                                 <td class="px-6 py-4 text-center font-bold border-b border-slate-500 whitespace-nowrap">
                                     {{ 'No responses yet.' }}
                                 </td>
@@ -188,13 +201,13 @@
                                 </svg>
                                 <span class="sr-only">Info</span>
                                 <div>
-                                <span class="font-medium">Currently no survery questionnaires added.</span>
+                                <span class="font-medium">Currently no survey questionnaires added.</span>
                                 </div>
                             </div>
                         </div>
                     @endforelse
                     <tfoot>
-                        <tr class="bg-white border-b">
+                        {{-- <tr class="bg-white border-b">
                             <td class="px-6 py-4 text-start border-b border-slate-500">
                                 <p class="w-full text-center font-bold tracking-widest text-slate-600">
                                     AVERAGES
@@ -212,7 +225,7 @@
                             <td class="px-6 py-4 text-center font-bold border-b border-slate-500 whitespace-nowrap">
                                 {!!to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])!!}
                             </td>
-                        </tr>
+                        </tr> --}}
                         <tr class="bg-white border-b">
                             @if ($view['evaluation_result']['total_responses'] > 0)
                                 <td class="px-6 py-4 text-start border-b border-slate-500">
@@ -222,22 +235,22 @@
                                 </td>
                                 <td colspan="12" class="px-6 py-4 text-start border-l border-b border-slate-500">
                                     <p class="w-full text-sm font-medium text-slate-600">
-                                        The collective weighted mean registers at
-                                        <span class="underline">{{number_format($view['evaluation_result']['averages']['mean'], 2)}}</span>,
-                                        accompanied by a mean squared figure of <span class="underline">{{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}</span>
-                                        and a standard deviation resting at <span class="underline">{{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}</span>.
+                                        The collective average rating registers at
+                                        <span class="underline font-bold">{{number_format($view['evaluation_result']['averages']['mean'], 2)}}</span>,
+                                        {{-- accompanied by a mean squared figure of <span class="underline">{{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}</span> --}}
+                                        {{-- and a standard deviation resting at <span class="underline">{{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}</span>. --}}
                                         In essence, the overall interpretation tends towards
                                         <span class="underline uppercase font-bold">{!!strip_tags(to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])) !!}</span>
                                     </p>
                                 </td>
                             @else
-                                <td colspan="3" class="px-6 py-4 text-start border-b border-slate-500">
+                                <td colspan="2" class="px-6 py-4 text-start border-b border-slate-500">
                                     <p class="w-full uppercase text-center font-bold tracking-widest text-slate-600">
                                         Descriptive Interpretation
                                     </p>
                                 </td>
                                 <td colspan="12" class="px-6 py-4 text-start border-l border-b border-slate-500">
-                                    <p class="w-full text-sm font-medium text-slate-600">
+                                    <p class="w-full text-sm text-center font-bold text-slate-900">
                                         No responses yet.
                                     </p>
                                 </td>
@@ -251,7 +264,6 @@
                     <div class="p-4 mt-5 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
                         <div class="uppercase font-bold">All Comments</div>
                     </div>
-                    {{-- andrei --}}
                     <div class="relative overflow-hidden shadow rounded-lg mt-2 max-h-56 overflow-y-auto" > 
                         <table class="w-full text-sm text-left" >
                             <tbody>
@@ -342,7 +354,7 @@
             </div>
         </div>
         @script('scripts')
-        <script type="module">
+        <script type="module" >
             $(document).ready(function() {
                 var noresponsetext = `<div class="text-xs font-bold uppercase text-red-500">No responses yet.</div>`;
 
@@ -560,7 +572,6 @@
                     }
                 }
             //--------------------bar chart-----------------------
-
         
                 function chart_se(elem) {
                     const options = {
@@ -604,6 +615,7 @@
                     }
                 }
             });
+
         </script>
         @endscript
     @elseif(in_array($form['action'], ['delete']))
