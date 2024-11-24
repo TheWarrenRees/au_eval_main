@@ -176,7 +176,7 @@ class EvaluationResults extends Component
                     $vader_scores['neu'][] = $vader_scores_neu;
                     $vader_scores['neg'][] = $vader_scores_neg;
                 }
-
+                // andrei
                 $evaluation_result = [
                     'total_responses' => 0,
                     'total_items' => 0,
@@ -256,7 +256,6 @@ class EvaluationResults extends Component
                         }                  
                         $total = array_sum($tally) / (int) $evaluation_result['total_responses'];
                         $item['weighted_mean'] = $total;
-                        // dd($total);  
                     }
                 }
 
@@ -354,7 +353,6 @@ class EvaluationResults extends Component
                 ];
 
                 $this->view = $view;
-                // dd($view);
 
             } else {
 
@@ -467,6 +465,7 @@ class EvaluationResults extends Component
 
                 $sorted_responses = [];
                 $comments = [];
+                $vader_scores = ['pos'=>[],'neg'=>[],'neu'=>[],'compound'=>[],'sentiment'=>''];
 
                 foreach ($responses as $response) {
                     foreach ($response->items as $item) {
@@ -478,13 +477,14 @@ class EvaluationResults extends Component
                         ];
 
                         $student_name = $response->students->firstname . ' ' . $response->students->lastname;
+
                         $comments[] = [
                             'commented_by' => $this->applyCensored($student_name),
                             'comment' => $response->comment
                         ];
                     }
                 }
-
+              
                 $evaluation_result = [
                     'total_responses' => count($responses),
                     'total_items' => 0,
@@ -618,7 +618,6 @@ class EvaluationResults extends Component
                     ];
                 }
 
-                //andrei
                 $evaluation_result['template'] = $template->toArray();
                 $evaluation_result['respondents'] = $this->respondents(1, array_values($evaluation_result));
                 $evaluation_results[] = $evaluation_result;
@@ -646,7 +645,7 @@ class EvaluationResults extends Component
                 'evaluation_results' => $evaluation_results,
             ];
             return $view;
-            
+        
         }
     }
 
@@ -740,12 +739,11 @@ class EvaluationResults extends Component
             'tab' => $this->form['tab']
         ];
 
-        // dd($data['vader']);
         $pdf = PDF::loadView('printable.result-view', $data);
 
         $faculty = $this->view['faculty'];
         $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '_' .time().'.pdf');
-        // @dd($tab);
+
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
         }, $filename);
@@ -794,40 +792,6 @@ class EvaluationResults extends Component
 
     }
 
-    //--------------------interpret vader-----------------------
-        public function vader_interpretation($vader_scores) {
-            
-            $compound = $this->calculateAverage($vader_scores);
-            if ($compound >= 0.50) {
-                $vinterpret = 'strongly positive';
-            } else if ($compound > 0.25 && $compound < 0.50) {
-                $vinterpret = 'positive';
-            } else if ($compound > 0 && $compound < 0.25) {
-                $vinterpret = 'moderate positive';
-            } else if ($compound == 0) {
-                $vinterpret = 'neutral'; 
-            } else if ($compound > -0.25 && $compound < 0) {
-                $vinterpret = 'moderate negative';
-            } else if ($compound > -0.50 && $compound < -0.25) {
-                $vinterpret = 'negative';
-            } else {
-                $vinterpret = 'strongly negative'; 
-            };
-
-            $formatted_compound = number_format($compound, 2);
-
-            $sentiment = [
-                'score'=>$formatted_compound , 'interpretation'=>$vinterpret
-            ];
-            return $sentiment;               
-        }
-
-        public function calculateAverage($array) {
-            $sum = array_sum($array);
-            $average = $sum / count($array);
-            return round($average, 2);            
-        }
-
     public function save_all_excel() {
 
         $view = $this->all_subjects();
@@ -870,6 +834,39 @@ class EvaluationResults extends Component
 
         // Return the Excel file as a downloadable response
         return Response::download($tempFilePath, $filename)->deleteFileAfterSend(true);
+    }
 
+    //--------------------interpret vader-----------------------
+    public function vader_interpretation($vader_scores) {
+        
+        $compound = $this->calculateAverage($vader_scores);
+        if ($compound >= 0.50) {
+            $vinterpret = 'strongly positive';
+        } else if ($compound > 0.25 && $compound < 0.50) {
+            $vinterpret = 'positive';
+        } else if ($compound > 0 && $compound < 0.25) {
+            $vinterpret = 'moderate positive';
+        } else if ($compound == 0) {
+            $vinterpret = 'neutral'; 
+        } else if ($compound > -0.25 && $compound < 0) {
+            $vinterpret = 'moderate negative';
+        } else if ($compound > -0.50 && $compound < -0.25) {
+            $vinterpret = 'negative';
+        } else {
+            $vinterpret = 'strongly negative'; 
+        };
+
+        $formatted_compound = number_format($compound, 2);
+
+        $sentiment = [
+            'score'=>$formatted_compound , 'interpretation'=>$vinterpret
+        ];
+        return $sentiment;               
+    }
+
+    public function calculateAverage($array) {
+        $sum = array_sum($array);
+        $average = $sum / count($array);
+        return round($average, 2);            
     }
 }

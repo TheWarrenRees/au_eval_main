@@ -124,7 +124,7 @@ table th {
                 @endforelse
             @empty
                 <div>
-                    Currently no survery questionnaires added.
+                    Currently no survey questionnaires added.
                 </div>
             @endforelse
             {{-- <tr>
@@ -169,6 +169,7 @@ table th {
                 @endif
             </tr>
         </table>
+
         <br>
         {{-- Comments --}}
         <div class="col-span-12">
@@ -201,15 +202,14 @@ table th {
                                     </div>
                                 </td>
                             </tr>
-
-                            @empty
-                                <tr class="bg-white border-b">
-                                    <td class="px-6 py-3 text-start">
-                                        <div class="text-xs font-bold uppercase text-red-500">
-                                            No comments yet.
-                                        </div>
-                                    </td>
-                                </tr>
+                        @empty
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-3 text-start">
+                                    <div class="text-xs font-bold uppercase text-red-500">
+                                        No comments yet.
+                                    </div>
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -242,8 +242,6 @@ table th {
                 @endif
             </tr>
         </table>
-
-        
     </body>
 </html>
 

@@ -79,8 +79,8 @@ table th {
                 </div>
             </th>
             <th style="border: none"></th>
-            <th style="border: none"></th>
-            <th style="border: none"></th>
+            {{-- <th style="border: none"></th>
+            <th style="border: none"></th> --}}
             <th style="border-left: none"></th>
         </tr>
         <tr>
@@ -90,19 +90,19 @@ table th {
                     {{$data['total_responses']}}
                 </span>
             </th>
-            <th style="width: 20px; text-align:center;">Weighted Mean</th>
-            <th style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">Mean Squared</th>
-            <th style="width: 20px; text-align:center;">Standard Deviation</th>
+            <th style="width: 20px; text-align:center;">Average Rating</th>
+            {{-- <th style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">Mean Squared</th>
+            <th style="width: 20px; text-align:center;">Standard Deviation</th> --}}
             <th style="width: 20px; text-align:center;">Interpretation</th>
         </tr>
         @forelse ($data['stats'] as $questionnaire)
             <tr>
-                <td style="width: 20px;">
+                <td style="width: 20px; background-color: #ebf5ff;">
                     {{ucwords($questionnaire['criteria_name'])}}
                 </td>
                 <td style="width: 20px; text-align:center;"></td>
-                <td style="width: 20px; text-align:center; background-color: #a689fa"></td>
-                <td style="width: 20px; text-align:center;"></td>
+                {{-- <td style="width: 20px; text-align:center; background-color: #a689fa"></td>
+                <td style="width: 20px; text-align:center;"></td> --}}
                 <td style="width: 20px; text-align:center;"></td>
             </tr>
             @forelse ($questionnaire['items'] as $items)
@@ -113,12 +113,12 @@ table th {
                     <td style="width: 20px; text-align:center;">
                         {{number_format($items['weighted_mean'], 2)}}
                     </td>
-                    <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
+                    {{-- <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
                         {{number_format($items['mean_squared'], 2)}}
                     </td>
                     <td style="width: 20px; text-align:center;">
                         {{number_format($items['standard_deviation'], 2)}}
-                    </td>
+                    </td> --}}
                     <td style="width: 20px; text-align:center;">
                         {!!strip_tags(to_interpret($items['interpretation']))!!}
                     </td>
@@ -131,17 +131,17 @@ table th {
                     <td style="width: 20px; text-align:center;">
                         {{number_format(0, 2)}}
                     </td>
-                    <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
+                    {{-- <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
                         {{number_format(0, 2)}}
                     </td>
                     <td style="width: 20px; text-align:center;">
                         {{number_format(0, 2)}}
-                    </td>
+                    </td> --}}
                     <td style="width: 20px; text-align:center;">
                         {{ 'No responses yet.' }}
                     </td>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td colspan="1" style="width: 20px; text-align:center;">
                         AVERAGES
                     </td>
@@ -157,11 +157,11 @@ table th {
                     <td style="width: 20px; text-align:center">
                         {!!to_interpret($data['averages']['descriptive_interpretation'])!!}
                     </td>
-                </tr>
+                </tr> --}}
             @endforelse
         @empty
             <div>
-                Currently no survery questionnaires added.
+                Currently no survey questionnaires added.
             </div>
         @endforelse
     </table>
@@ -170,17 +170,17 @@ table th {
             <td style="width: 100%; text-align:center">
                 Descriptive Interpretation
             </td>
-            <td style="width: 100%; text-align:center">
-                The collective weighted mean registers at
-                {{number_format($data['averages']['mean'], 2)}},
-                accompanied by a mean squared figure of {{number_format($data['averages']['squared_mean'], 2)}}
-                and a standard deviation resting at {{number_format($data['averages']['standard_deviation'], 2)}}.
-                In essence, the overall interpretation tends towards
-                {!!strip_tags(to_interpret($items['interpretation']))!!}
-            </td>
-        </tr>
-    </table>
-@endforeach
+                <td style="width: 100%; text-align:center">
+                    The collective weighted mean registers at
+                    <span style="font-style: bold;">{{number_format($data['averages']['mean'], 2)}},</span>.
+                    {{-- accompanied by a mean squared figure of {{number_format($data['averages']['squared_mean'], 2)}}
+                    and a standard deviation resting at {{number_format($data['averages']['standard_deviation'], 2)}}. --}}
+                    In essence, the overall interpretation tends towards
+                    {!!strip_tags(to_interpret($items['interpretation']))!!}
+                </td>
+            </tr>
+        </table>
+    @endforeach
 </body>
 </html>
 

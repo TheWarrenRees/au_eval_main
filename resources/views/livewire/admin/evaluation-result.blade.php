@@ -39,7 +39,6 @@
                 </ul>
             </div>
             <div class="relative my-8 w-100 sm:flex gap-3">
-                {{-- @dd($view['all_templates']) --}}
                 @foreach ($view['all_templates']->templates as $key => $template)
                     @if($form['tab'] == $key+1)
                         <a wire:navigate href="{{ route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $template->faculty_id, 'template' => $template->template_id, 'subject' => $template->curriculum_template[0]->subject_id, 'tab' => $key + 1])}}" class="px-3 border bg-sky-600 border-sky-600 py-3 text-white font-bold">
@@ -354,7 +353,7 @@
             </div>
         </div>
         @script('scripts')
-        <script type="module" >
+        <script type="module">
             $(document).ready(function() {
                 var noresponsetext = `<div class="text-xs font-bold uppercase text-red-500">No responses yet.</div>`;
 
